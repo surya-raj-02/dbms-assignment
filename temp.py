@@ -10,7 +10,7 @@ app.config['DEBUG'] = True
 def home():
     return render_template('temp.html',)
 
-@app.route('/login', methods = ['POST','GET'])
+@app.route('/Login/login.html', methods = ['POST','GET'])
 def home():
     return render_template('login.html',)
 
