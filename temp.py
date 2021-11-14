@@ -14,8 +14,8 @@ db = SQLAlchemy()
 def home():
     return render_template('temp.html',)
 
-@app.route('/login', methods = ['POST','GET'])
-def login():
+@app.route('/Login/login.html', methods = ['POST','GET'])
+def home():
     return render_template('login.html',)
 
 if __name__ == '__main__':
