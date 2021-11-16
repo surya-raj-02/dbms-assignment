@@ -21,16 +21,14 @@
 </head>
 <body>
     <center><h2>DBMS Assignment 4</h2>
-    <form method="POST" action="http://localhost:5000/login">
-    <h1>Security Management System</h1>
-    <br>
-    <br>
-    <h3>Surya Raj</h3>
-    <h3>Swaroop bhat</h3>
-    <h3>Sudhanva Rajesh</h3>
-    <br>
-    <br>
-    <input type="submit" value="Continue">
+    <form method="POST" action="http://localhost:5000/query">
+	{% for r in rows %}
+		{% for i in r %}
+		<h1>{{i}}</h1>
+		{%endfor%}
+		<br>
+    {% endfor %}
+	<input type="submit" value="Continue">
 	</form>
     </center>
 </body>
