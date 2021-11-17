@@ -30,17 +30,23 @@ def query():
     con.commit()
     con.close()
     return render_template('query.html',tables=tables)
+@app.route('/result', methods = ['POST','GET'])
+def result():
+    print(request.form)
+    return render_template('query.html')
 
 @app.route('/queryResult', methods = ['POST','GET'])
 def queryResult():
     
     command=request.form["command"]
     table=request.form["table"][2:-3]
+    values=request.form["values"]
 
     if "select" in command:
         query=command+" * from "+table+';'
+
     elif command=="insert into":
-        query=command+" from "+table+';'
+        query=command+" "+table+ " values(" + values + ");"
     
     elif command=="alter table":
         action=request.form["action"]
@@ -56,17 +62,18 @@ def queryResult():
         password="2511"
     )
     cur=con.cursor()
-    print(cur)
-    print(query)
     cur.execute(query)
+    if "select" in query:
+        rows=cur.fetchall()
+    else:
+        query="select"+" * from "+table+';'
+        cur.execute(query)
+        rows=cur.fetchall()
     column_names = [desc[0] for desc in cur.description]
-    print(column_names)
-    rows=cur.fetchall()
-    print(rows)
     con.commit()
     con.close()
     return render_template('queryResult.html',rows=rows,columns=column_names)
-#    return render_template('index.html',rows=rows)
+
 
 
 if __name__ == '__main__':
