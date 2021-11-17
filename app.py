@@ -30,6 +30,9 @@ def query():
     con.commit()
     con.close()
     return render_template('query.html',tables=tables)
+@app.route('/result', methods = ['POST','GET'])
+def result():
+    print(request.form)
 
 @app.route('/queryResult', methods = ['POST','GET'])
 def queryResult():
