@@ -1,63 +1,69 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<!--===============================================================================================-->	
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icons/favicon.ico') }}"/>
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/animate/animate.css') }}">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css') }}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/util.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-<!--===============================================================================================-->
-    </style>
+  <!--===============================================================================================-->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icons/favicon.ico') }}" />
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/animate/animate.css') }}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css"
+    href="{{ url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css') }}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/util.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+  <!--===============================================================================================-->
+  </style>
 </head>
+
 <body>
-    <br>
-    <br>
-    <center><h2>DBMS Assignment 4</h2>
+  <br>
+  <br>
+  <center>
+    <h2>DBMS Assignment 4</h2>
     <br>
     <br>
     <br>
     <form method="POST" action="http://localhost:5000/queryResult">
-    
-    <label for="command">Choose a command:</label>
-    <select name="command" id="command">
-      <option value="select">select *</option>
-      <option value="insert into">insert into</option>
-      <option value="alter table">alter table</option>
-      <option value="update">update</option>
-    </select>
-    <br><br>
-    <label for="table">Choose the table:</label>
-    <select name="table" id="table">
-      {% for t in tables %}
-      <option value="{{t}}">{{t[0]}}</option>
-      {% endfor %}
-    </select>
-    <br><br>
-    <label for="Values">values to insert (if command is insert into):</label>
-    <input type="text" id="values" name="values"><br><br>
 
-    <label for="set">set column value (if command is update):</label>
-    <input type="text" id="set" name="set"><br><br>
+      <label for="command">Choose a command:</label>
+      <select name="command" id="command">
+        <option value="select">select *</option>
+        <option value="insert into">insert into</option>
+        <option value="alter table">alter table</option>
+        <option value="update">update</option>
+      </select>
+      <br><br>
+      <label for="table">Choose the table:</label>
+      <select name="table" id="table">
+        {% for t in tables %}
+        <option value="{{t}}">{{t[0]}}</option>
+        {% endfor %}
+      </select>
+      <br><br>
+      <label for="Values">values to insert (if command is insert into):</label>
+      <input type="text" id="values" name="values"><br><br>
 
-    <label for="where">where condition (if command is update):</label>
-    <input type="text" id="where" name="where"><br><br>
+      <label for="set">set column value (if command is update):</label>
+      <input type="text" id="set" name="set"><br><br>
 
-    <label for="action">action (if command is alter table):</label>
-    <input type="text" id="action" name="action"><br><br>
+      <label for="where">where condition (if command is update):</label>
+      <input type="text" id="where" name="where"><br><br>
 
-    <input type="submit" value="Continue">
-	</form>
-    </center>
+      <label for="action">action (if command is alter table):</label>
+      <input type="text" id="action" name="action"><br><br>
+
+      <input type="submit" value="Continue">
+    </form>
+  </center>
 </body>
 
 </html>

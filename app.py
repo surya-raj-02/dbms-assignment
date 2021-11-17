@@ -22,7 +22,7 @@ def query():
         host="localhost",
         database="postgres",
         user="postgres",
-        password="2511"
+        password="admin"
     )
     cur=con.cursor()
     cur.execute("""SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'""")
@@ -35,9 +35,10 @@ def query():
 def queryResult():
     
     command=request.form["command"]
-    table=request.form["table"]
-    if command=="select *":
-        query=command+" from "+table+';'
+    table=request.form["table"][2:-3]
+
+    if "select" in command:
+        query=command+" * from "+table+';'
     elif command=="insert into":
         query=command+" from "+table+';'
     
@@ -52,11 +53,14 @@ def queryResult():
         host="localhost",
         database="postgres",
         user="postgres",
-        password="2511"
+        password="admin"
     )
     cur=con.cursor()
+    print(cur)
+    print(query)
     cur.execute(query)
     rows=cur.fetchall()
+    print(rows)
     con.commit()
     con.close()
     return render_template('queryResult.html',rows=rows)
