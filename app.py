@@ -36,11 +36,13 @@ def queryResult():
     
     command=request.form["command"]
     table=request.form["table"][2:-3]
+    values=request.form["values"]
 
     if "select" in command:
         query=command+" * from "+table+';'
+
     elif command=="insert into":
-        query=command+" from "+table+';'
+        query=command+" "+table+ " values(" + values + ");"
     
     elif command=="alter table":
         action=request.form["action"]
@@ -56,11 +58,13 @@ def queryResult():
         password="admin"
     )
     cur=con.cursor()
-    print(cur)
-    print(query)
     cur.execute(query)
-    rows=cur.fetchall()
-    print(rows)
+    if "select" in query:
+        rows=cur.fetchall()
+    else:
+        query="select"+" * from "+table+';'
+        cur.execute(query)
+        rows=cur.fetchall()
     con.commit()
     con.close()
     return render_template('queryResult.html',rows=rows)
