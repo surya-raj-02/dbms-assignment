@@ -7,8 +7,10 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__, static_folder='templates')
 app.config['DEBUG'] = True
 
-user_name=''
-password=""
+user_name = ''
+password = ""
+
+
 @app.route('/', methods=['POST', 'GET'])
 def home():
     return render_template('temp.html', )
@@ -25,9 +27,9 @@ def query():
         global user_name
         global password
         con = psycopg2.connect(host="localhost",
-                            database="postgres",
-                            user=user_name,
-                            password=password)
+                               database="postgres",
+                               user=user_name,
+                               password=password)
         cur = con.cursor()
         cur.execute(
             """SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"""
@@ -44,17 +46,17 @@ def query():
 def result():
     try:
         con = psycopg2.connect(host="localhost",
-                            database="postgres",
-                            user=request.form['email'],
-                            password=request.form['pass'])
+                               database="postgres",
+                               user=request.form['email'],
+                               password=request.form['pass'])
         cur = con.cursor()
         cur.execute(
             """SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"""
         )
         global user_name
-        user_name=request.form['email']
+        user_name = request.form['email']
         global password
-        password=request.form['pass']
+        password = request.form['pass']
         tables = cur.fetchall()
         con.commit()
         con.close()
@@ -91,9 +93,9 @@ def queryResult():
         print(query)
     try:
         con = psycopg2.connect(host="localhost",
-                            database="postgres",
-                            user="postgres",
-                            password="admin")
+                               database="postgres",
+                               user=user_name,
+                               password=password)
         cur = con.cursor()
         cur.execute(query)
         if "select" in query:
@@ -105,7 +107,9 @@ def queryResult():
         column_names = [desc[0] for desc in cur.description]
         con.commit()
         con.close()
-        return render_template('queryResult.html', rows=rows, columns=column_names)
+        return render_template('queryResult.html',
+                               rows=rows,
+                               columns=column_names)
     except Exception as e:
         return render_template('error.html')
 
