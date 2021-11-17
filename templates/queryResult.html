@@ -2,33 +2,55 @@
 <html>
 
 <head>
-	<!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icons/favicon.ico') }}" />
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css"
-		href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css"
-		href="{{ url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/animate/animate.css') }}">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css"
-		href="{{ url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css') }}">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}">
-	<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/util.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-	<!--===============================================================================================-->
+	<style>
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
+
+		th,
+		td {
+			padding: 8px;
+			text-align: left;
+			border-bottom: 1px solid #ddd;
+		}
+
+		tr:hover {
+			background-color: yellow;
+		}
 	</style>
+<!--===============================================================================================-->	
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='templates/images/icons/favicon.ico')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/bootstrapTable/css/bootstrap.min.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/animateTable/animate.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/select2Table/select2.min.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/perfect-scrollbarTable/perfect-scrollbar.css')}}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/utilTable.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/mainTable.css')}}">
+<!--===============================================================================================-->
 </head>
 
 <body>
 	<div>
+		<br>
+		<br>
 		<h2>DBMS Assignment 4</h2>
+		<h1>Security management System</h1>
+		<br><br>
 		<form method="POST" action="http://localhost:5000/query">
 			<table>
+				<tr>
+					{%for i in columns%}
+					<th style="font-weight: bold">{{i}}</th>
+					{%endfor%}
+				</tr>
 				{% for r in rows %}
 				<tr>
 					{% for i in r %}
@@ -37,6 +59,7 @@
 				</tr>
 				{% endfor %}
 			</table>
+			<br>
 			<input type="submit" value="Continue">
 		</form>
 	</div>

@@ -59,7 +59,7 @@ def queryResult():
     rows=cur.fetchall()
     con.commit()
     con.close()
-    return render_template('queryResult.html',rows=rows)
+    return render_template('index.html',rows=rows)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -2,27 +2,30 @@
 <html>
 <head>
 <!--===============================================================================================-->	
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icons/favicon.ico') }}"/>
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='templates/images/icons/favicon.ico')}}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/bootstrapTable/css/bootstrap.min.css')}}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/animate/animate.css') }}">
-<!--===============================================================================================-->	
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/animateTable/animate.css')}}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/select2Table/select2.min.css')}}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/util.css') }}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/perfect-scrollbarTable/perfect-scrollbar.css')}}">
 <!--===============================================================================================-->
-    </style>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/utilTable.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/mainTable.css')}}">
+<!--===============================================================================================-->
+
 </head>
 <body>
-    <center><h2>DBMS Assignment 4</h2>
-    <form method="POST" action="http://localhost:5000/login">
+    <br>
+    <br>
+    <center>
+    <h2>DBMS Assignment 4</h2>
     <h1>Security Management System</h1>
+    <form method="POST" action="http://localhost:5000/login">
     <br>
     <br>
     <h3>Surya Raj</h3>

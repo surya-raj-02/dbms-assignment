@@ -22,7 +22,7 @@ def query():
         host="localhost",
         database="postgres",
         user="postgres",
-        password="admin"
+        password="2511"
     )
     cur=con.cursor()
     cur.execute("""SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'""")
@@ -53,17 +53,21 @@ def queryResult():
         host="localhost",
         database="postgres",
         user="postgres",
-        password="admin"
+        password="2511"
     )
     cur=con.cursor()
     print(cur)
     print(query)
     cur.execute(query)
+    column_names = [desc[0] for desc in cur.description]
+    print(column_names)
     rows=cur.fetchall()
     print(rows)
     con.commit()
     con.close()
-    return render_template('queryResult.html',rows=rows)
+    return render_template('queryResult.html',rows=rows,columns=column_names)
+#    return render_template('index.html',rows=rows)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
