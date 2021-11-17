@@ -33,6 +33,7 @@ def query():
 @app.route('/result', methods = ['POST','GET'])
 def result():
     print(request.form)
+    return render_template('query.html')
 
 @app.route('/queryResult', methods = ['POST','GET'])
 def queryResult():
