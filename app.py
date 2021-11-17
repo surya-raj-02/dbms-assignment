@@ -42,7 +42,10 @@ def queryResult():
     table=request.form["table"][2:-3]
     values=request.form["values"]
 
-    if "select" in command:
+    if command=="complex":
+        query=request.form["complex"]
+
+    elif "select" in command:
         query=command+" * from "+table+';'
 
     elif command=="insert into":

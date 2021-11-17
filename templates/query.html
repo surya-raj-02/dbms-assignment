@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  
   <!--===============================================================================================-->
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icons/favicon.ico') }}" />
   <!--===============================================================================================-->
@@ -29,9 +30,9 @@
   <br>
   <center>
     <h2>DBMS Assignment 4</h2>
-    <br>
-    <br>
-    <br>
+    <h1>Security management System</h1>
+		<br><br>
+ 
     <form method="POST" action="http://localhost:5000/queryResult">
 
       <label for="command">Choose a command:</label>
@@ -40,6 +41,7 @@
         <option value="insert into">insert into</option>
         <option value="alter table">alter table</option>
         <option value="update">update</option>
+        <option value="complex">complex</option>
       </select>
       <br><br>
       <label for="table">Choose the table:</label>
@@ -50,17 +52,21 @@
       </select>
       <br><br>
       <label for="Values">values to insert (if command is insert into):</label>
-      <input type="text" id="values" name="values"><br><br>
+      <input type="text" id="values" name="values" style="background-color: lightgray;"><br><br>
 
       <label for="set">set column value (if command is update):</label>
-      <input type="text" id="set" name="set"><br><br>
+      <input type="text" id="set" name="set" style="background-color: lightgray;"><br><br>
 
       <label for="where">where condition (if command is update):</label>
-      <input type="text" id="where" name="where"><br><br>
+      <input type="text" id="where" name="where" style="background-color: lightgray;"><br><br>
 
       <label for="action">action (if command is alter table):</label>
-      <input type="text" id="action" name="action"><br><br>
+      <input type="text" id="action" name="action" style="background-color: lightgray;"><br><br>
+      <br><br><br><br>
 
+      <label for="complex">complex query:</label>
+      <input type="text" id="complex" name="complex" style="background-color: lightgray;"><br><br>
+      <br><br>
       <input type="submit" value="Continue">
     </form>
   </center>
