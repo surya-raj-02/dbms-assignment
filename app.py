@@ -22,7 +22,7 @@ def query():
         host="localhost",
         database="postgres",
         user="postgres",
-        password="admin"
+        password=""
     )
     cur=con.cursor()
     cur.execute("""SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'""")
