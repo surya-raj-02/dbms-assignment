@@ -1,14 +1,18 @@
 import psycopg2
 import os
+import numpy as np
 
 from flask import Flask, request, render_template
+
+global user_name
+global password
+
+user_name = 'postgres'
+password = "admin"
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__, static_folder='templates')
 app.config['DEBUG'] = True
-
-user_name = ''
-password = ""
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -35,6 +39,8 @@ def query():
             """SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"""
         )
         tables = cur.fetchall()
+        cur.execute("\d security_agency")
+        print(cur.fetchall())
         con.commit()
         con.close()
         return render_template('query.html', tables=tables)
@@ -42,25 +48,69 @@ def query():
         return render_template('error.html')
 
 
+@app.route('/dashboard', methods=['POST'])
+def dashboard():
+    global user_name
+    global password
+    con = psycopg2.connect(host="localhost",
+                           database="postgres",
+                           user=user_name,
+                           password=password)
+    cur = con.cursor()
+    cur.execute("Select * FROM security_agency LIMIT 0")
+    tables_sa = [desc[0] for desc in cur.description]
+    updated_sec_agency = request.form.getlist("rows_sec_agency")
+
+    cur.execute("Select * FROM principle_employer LIMIT 0")
+    tables_pe = [desc[0] for desc in cur.description]
+    updated_pe = request.form.getlist("rows_pe")
+    l1 = np.array(updated_sec_agency).reshape(
+        len(updated_sec_agency) // len(tables_sa), len(tables_sa))
+    l2 = np.array(updated_pe).reshape(
+        len(updated_pe) // len(tables_pe), len(tables_pe))
+    return render_template(
+        "dashboard.html",
+        colnames_sec_agency=tables_sa,
+        rows_sec_agency=l1,
+        colnames_pe=tables_pe,
+        rows_pe=l2
+    )
+
+
 @app.route('/result', methods=['POST'])
 def result():
     try:
-        con = psycopg2.connect(host="localhost",
-                               database="postgres",
-                               user=request.form['email'],
-                               password=request.form['pass'])
-        cur = con.cursor()
-        cur.execute(
-            """SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"""
-        )
-        global user_name
-        user_name = request.form['email']
-        global password
-        password = request.form['pass']
-        tables = cur.fetchall()
-        con.commit()
-        con.close()
-        return render_template('query.html', tables=tables)
+        user = request.form['email']
+        pswd = request.form['pass']
+        if user == "admin" and pswd == "admin":
+            con = psycopg2.connect(host="localhost",
+                                   database="postgres",
+                                   user=user_name,
+                                   password=password)
+            cur = con.cursor()
+            cur.execute(
+                """SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"""
+            )
+            tables = cur.fetchall()
+            cur.execute("Select * FROM security_agency LIMIT 0")
+            colnames_sec_agency = [desc[0] for desc in cur.description]
+            cur.execute("Select * FROM security_agency")
+            rows_sec_agency = cur.fetchall()
+            cur.execute("Select * FROM principle_employer LIMIT 0")
+            colnames_pe = [desc[0] for desc in cur.description]
+            cur.execute("Select * FROM principle_employer")
+            rows_pe = cur.fetchall()
+            con.commit()
+            con.close()
+            print(rows_sec_agency)
+            return render_template('dashboard.html',
+                                   colnames_sec_agency=colnames_sec_agency,
+                                   rows_sec_agency=rows_sec_agency,
+                                   colnames_pe=colnames_pe,
+                                   rows_pe=rows_pe)
+        else:
+            return render_template('error.html')
+            # return render_template('query.html', tables=tables)
     except Exception as e:
         print(e)
         return render_template('error.html')

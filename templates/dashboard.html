@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      tr:hover {
+        background-color: yellow;
+      }
+    </style>
+    <!--===============================================================================================-->
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{ url_for('static', filename='templates/images/icons/favicon.ico')}}"
+    />
+    <!--===============================================================================================-->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='templates/vendor/bootstrapTable/css/bootstrap.min.css')}}"
+    />
+    <!--===============================================================================================-->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='templates/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}"
+    />
+    <!--===============================================================================================-->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='templates/vendor/animateTable/animate.css')}}"
+    />
+    <!--===============================================================================================-->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='templates/vendor/select2Table/select2.min.css')}}"
+    />
+    <!--===============================================================================================-->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='templates/vendor/perfect-scrollbarTable/perfect-scrollbar.css')}}"
+    />
+    <!--===============================================================================================-->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/utilTable.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/mainTable.css')}}"
+    />
+    <!--===============================================================================================-->
+  </head>
+
+  <body>
+    <div>
+      <br />
+      <br />
+      <h1>Security Agencies</h1>
+      <br /><br />
+      <form action="/dashboard" method="post">
+        <table>
+          <tr>
+            {%for i in colnames_sec_agency%}
+            <th style="font-weight: bold">{{i}}</th>
+            {%endfor%}
+          </tr>
+          {% for r in rows_sec_agency %}
+          <tr>
+            {% for i in r %}
+            <td><input type="text" name="rows_sec_agency" value="{{i}}" /></td>
+
+            {%endfor%}
+          </tr>
+          {% endfor %}
+        </table>
+        <br />
+        <br /><br />
+        <h1>Principle Employers</h1>
+        <br /><br />
+        <table>
+          <tr>
+            {%for i in colnames_pe%}
+            <th style="font-weight: bold">{{i}}</th>
+            {%endfor%}
+          </tr>
+          {% for r in rows_pe %}
+          <tr>
+            {% for i in r %}
+            <td><input type="text" name="rows_pe" value="{{i}}" /></td>
+            {%endfor%}
+          </tr>
+          {% endfor %}
+        </table>
+        <input type="submit" value="Update Changes" />
+      </form>
+    </div>
+  </body>
+</html>
