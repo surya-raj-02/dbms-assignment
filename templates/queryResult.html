@@ -19,32 +19,40 @@
 			background-color: yellow;
 		}
 	</style>
-<!--===============================================================================================-->	
-<link rel="icon" type="image/png" href="{{ url_for('static', filename='templates/images/icons/favicon.ico')}}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/bootstrapTable/css/bootstrap.min.css')}}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/animateTable/animate.css')}}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/select2Table/select2.min.css')}}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='templates/vendor/perfect-scrollbarTable/perfect-scrollbar.css')}}">
-<!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/utilTable.css')}}">
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/mainTable.css')}}">
-<!--===============================================================================================-->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icons/favicon.ico') }}" />
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/animate/animate.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/util.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+	<!--===============================================================================================-->
 </head>
 
 <body>
 	<div>
-		<br>
-		<br>
-		<h2>DBMS Assignment 4</h2>
-		<h1>Security management System</h1>
-		<br><br>
-		<form method="POST" action="http://localhost:5000/query">
+		<center>
+			<br>
+			<br>
+			<h2>DBMS Assignment 4</h2>
+			<h1>Security management System</h1>
+		</center>
+		<br><br><br><br>
+		<form method="POST" action="http://localhost:5000/Loginresult2">
 			<table>
 				<tr>
 					{%for i in columns%}
@@ -60,7 +68,12 @@
 				{% endfor %}
 			</table>
 			<br>
-			<input type="submit" value="Continue">
+			<br><br>
+			<center>
+				<div class="container-login100-form-btn" style="width: 15%;">
+					<button type="submit" name="xyz" class="login100-form-btn" value="{{user,password}}">Go Back</button>
+				</div>
+			</center>
 		</form>
 	</div>
 </body>

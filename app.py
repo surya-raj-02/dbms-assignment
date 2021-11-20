@@ -7,8 +7,18 @@ from flask import Flask, request, render_template
 global user_name
 global password
 
+
 user_name = 'postgres'
-password = "admin"
+password = "2511"
+sa = {'25262': "password",
+      '25261': "password",
+      '25263': "password",
+      '25264': "password",
+      '25265': "password",
+      '25266': "password",
+      '25267': "password",
+      '25268': "password",
+      }
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__, static_folder='templates')
@@ -76,9 +86,67 @@ def dashboard():
         rows_pe=l2
     )
 
+@app.route('/Loginresult2', methods=['POST'])
+def Loginresult2():
+    try:
+        temp = request.form["xyz"].split(',')
+        user=temp[0][2:-1]
+        pswd=temp[1][2:-2]
+        print(user)
+        print(pswd)
+        if user in list(sa.keys()) and pswd == sa[user]:
+            con = psycopg2.connect(host="localhost",
+                       database="postgres",
+                       user=user_name,
+                       password=password)
+            cur = con.cursor()
+            
+            query1="select agency_name from security_agency where agency_id="+user+";"
+            cur.execute(query1)
+            agency_name = cur.fetchall()[0][0]
+            
+            query2="select count(*) from principle_employer where agency_id="+user+";"
+            cur.execute(query2)
+            noOfPE = cur.fetchall()[0][0]
+            
+            query3="select count(*) from guards where agency_id ="+user+";"
+            cur.execute(query3)
+            noOfGuards = cur.fetchall()[0][0]
+            
+            query4="select avg(basic_vda+hra) from salary where agency_id="+user+";"
+            cur.execute(query4)
+            avgSalGuards = int(cur.fetchall()[0][0])
+            
+            query5="select sum(pf+eldi+uniform_cost) from contributions where c_id="+user+";"
+            cur.execute(query5)
+            TotCon = cur.fetchall()[0][0]
+            
+            query6="select count(*) from manager where agency_id="+user+";"
+            cur.execute(query6)
+            NoOfMan = cur.fetchall()[0][0]
+            
+            
+            return render_template('SecurityDashboard.html',
+                                   securityagency=agency_name,
+                                   noOfPE=noOfPE,
+                                   noOfGuards=noOfGuards,
+                                   AvgSalaryOfGuards=avgSalGuards,
+                                   TotalContribution=TotCon,
+                                   noOfManagers=NoOfMan,
+                                   agency_id=user,
+                                   password=pswd)
 
-@app.route('/result', methods=['POST'])
-def result():
+        else:
+            return render_template('error.html')
+            
+    except Exception as e:
+        print(e)
+        return render_template('error.html')
+
+
+
+@app.route('/Loginresult', methods=['POST'])
+def Loginresult():
     try:
         user = request.form['email']
         pswd = request.form['pass']
@@ -108,9 +176,54 @@ def result():
                                    rows_sec_agency=rows_sec_agency,
                                    colnames_pe=colnames_pe,
                                    rows_pe=rows_pe)
+        # print(type(sa))
+        # print(type(user))
+        # print(sa[user])
+        elif user in list(sa.keys()) and pswd == sa[user]:
+            con = psycopg2.connect(host="localhost",
+                       database="postgres",
+                       user=user_name,
+                       password=password)
+            cur = con.cursor()
+            
+            query1="select agency_name from security_agency where agency_id="+user+";"
+            cur.execute(query1)
+            agency_name = cur.fetchall()[0][0]
+            
+            query2="select count(*) from principle_employer where agency_id="+user+";"
+            cur.execute(query2)
+            noOfPE = cur.fetchall()[0][0]
+            
+            query3="select count(*) from guards where agency_id ="+user+";"
+            cur.execute(query3)
+            noOfGuards = cur.fetchall()[0][0]
+            
+            query4="select avg(basic_vda+hra) from salary where agency_id="+user+";"
+            cur.execute(query4)
+            avgSalGuards = int(cur.fetchall()[0][0])
+            
+            query5="select sum(pf+eldi+uniform_cost) from contributions where c_id="+user+";"
+            cur.execute(query5)
+            TotCon = cur.fetchall()[0][0]
+            
+            query6="select count(*) from manager where agency_id="+user+";"
+            cur.execute(query6)
+            NoOfMan = cur.fetchall()[0][0]
+            
+            
+            return render_template('SecurityDashboard.html',
+                                   securityagency=agency_name,
+                                   noOfPE=noOfPE,
+                                   noOfGuards=noOfGuards,
+                                   AvgSalaryOfGuards=avgSalGuards,
+                                   TotalContribution=TotCon,
+                                   noOfManagers=NoOfMan,
+                                   agency_id=user,
+                                   password=pswd)
+
         else:
             return render_template('error.html')
-            # return render_template('query.html', tables=tables)
+            
     except Exception as e:
         print(e)
         return render_template('error.html')
@@ -162,6 +275,100 @@ def queryResult():
                                columns=column_names)
     except Exception as e:
         return render_template('error.html')
+
+
+@app.route('/securityDashboardResult_managers', methods=['POST', 'GET'])
+def securityDashboardResult_managers():
+    temp = request.form["managers"].split(',')
+    i=temp[0][2:-1]
+    pwdx=temp[1][2:-2]
+    con = psycopg2.connect(host="localhost",
+                           database="postgres",
+                           user=user_name,
+                           password=password)
+    cur = con.cursor()
+    query = "select * from manager where agency_id="+i+';'
+    print(query)
+    cur.execute(query)
+    rows = cur.fetchall()
+    print(rows)
+    column_names = [desc[0] for desc in cur.description]
+    con.commit()
+    con.close()
+    return render_template('queryResult.html',
+                           rows=rows,
+                           columns=column_names,
+                           user=i,
+                           password=pwdx)
+
+
+@app.route('/securityDashboardResult_contributions', methods=['POST', 'GET'])
+def securityDashboardResult_contributions():
+    temp = request.form["contributions"].split(',')
+    i=temp[0][2:-1]
+    pwdx=temp[1][2:-2]
+    con = psycopg2.connect(host="localhost",
+                           database="postgres",
+                           user=user_name,
+                           password=password)
+    cur = con.cursor()
+    query = "select * from contributions where c_id="+i+';'
+    cur.execute(query)
+    rows = cur.fetchall()
+    column_names = [desc[0] for desc in cur.description]
+    con.commit()
+    con.close()
+    return render_template('queryResult.html',
+                           rows=rows,
+                           columns=column_names,
+                           user=i,
+                           password=pwdx)
+
+
+@app.route('/securityDashboardResult_guards', methods=['POST', 'GET'])
+def securityDashboardResult_guards():
+    temp = request.form["guards"].split(',')
+    i=temp[0][2:-1]
+    pwdx=temp[1][2:-2]
+    con = psycopg2.connect(host="localhost",
+                           database="postgres",
+                           user=user_name,
+                           password=password)
+    cur = con.cursor()
+    query = "select * from guards where agency_id="+i+';'
+    cur.execute(query)
+    rows = cur.fetchall()
+    column_names = [desc[0] for desc in cur.description]
+    con.commit()
+    con.close()
+    return render_template('queryResult.html',
+                           rows=rows,
+                           columns=column_names,
+                           user=i,
+                           password=pwdx)
+
+
+@app.route('/securityDashboardResult_PE', methods=['POST', 'GET'])
+def securityDashboardResult_PE():
+    temp = request.form["PE"].split(',')
+    i=temp[0][2:-1]
+    pwdx=temp[1][2:-2]
+    con = psycopg2.connect(host="localhost",
+                           database="postgres",
+                           user=user_name,
+                           password=password)
+    cur = con.cursor()
+    query = "select * from principle_employer where agency_id="+i+';'
+    cur.execute(query)
+    rows = cur.fetchall()
+    column_names = [desc[0] for desc in cur.description]
+    con.commit()
+    con.close()
+    return render_template('queryResult.html',
+                           rows=rows,
+                           columns=column_names,
+                           user=i,
+                           password=pwdx)
 
 
 if __name__ == '__main__':
