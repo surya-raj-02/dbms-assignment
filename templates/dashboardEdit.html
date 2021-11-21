@@ -60,32 +60,24 @@
       </tr>
       {% for r in rows_sec_agency %}
       <tr>
-        {% for i in r %}
-        <td>{{i}}</td>
-        {%endfor%}
-        <td>
-          <form action="http://localhost:5000/Loginresult" method="post">
-            <input type="hidden" name="email" value="{{r[1]}}" />
-            <input type="hidden" name="pass" value="adminSA" />
+        <form action="http://localhost:5000/SAUpdate" method="post">
+          <td><input type="text" name='0' value="{{r[0]}}"></td>
+          <td>{{r[1]}}</td>
+          <td><input type="text" name='2' value="{{r[2]}}"></td>
+          <td>{{r[3]}}</td>
+          <td>
+
+            <input type="hidden" name="password" value="{{ adminSA }}" />
             <input type="hidden" name="uid" value="{{ r[1] }}" />
             <div class="container-login100-form-btn" style="width: 15%;">
-              <button type="submit" name="submit" class="login100-form-btn">Info
+              <button type="submit" name="submit" class="login100-form-btn" value="{{user,password}}">Save
               </button>
             </div>
-          </form>
+        </form>
         </td>
       </tr>
       {% endfor %}
     </table>
-
-    <form action="http://localhost:5000/dashboardEdit" method="post">
-      <input type="hidden" name="email" value="{{ user }}" />
-      <input type="hidden" name="pass" value="{{ password }}" />
-      <div class="container-login100-form-btn" style="width: 15%;">
-        <button type="submit" name="guard" class="login100-form-btn" value="{{user,password}}">Update
-        </button>
-      </div>
-    </form>
 
     <br />
     <br /><br />
@@ -108,7 +100,14 @@
       {% endfor %}
     </table>
 
-
+    <form action="http://localhost:5000/Loginresult" method="post">
+      <input type="hidden" name="email" value="admin" />
+      <input type="hidden" name="pass" value="admin" />
+      <div class="container-login100-form-btn" style="width: 15%;">
+        <button type="submit" name="guards" class="login100-form-btn" value="{{user,password}}">continue
+        </button>
+      </div>
+    </form>
 
   </div>
 </body>

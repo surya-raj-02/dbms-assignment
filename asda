@@ -1,0 +1,246 @@
+from numpy.core.fromnumeric import sort
+import psycopg2
+import os
+import numpy as np
+
+from flask import Flask, request, render_template
+
+global user_name
+global password
+
+user_name = 'postgres'
+password = "admin"
+
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, static_folder='templates')
+app.config['DEBUG'] = True
+
+
+@app.route('/', methods=['POST', 'GET'])
+def home():
+    return render_template('temp.html', )
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    return render_template('login.html', )
+
+
+@app.route('/query', methods=['POST', 'GET'])
+def query():
+    try:
+        global user_name
+        global password
+        con = psycopg2.connect(host="localhost",
+                               database="postgres",
+                               user=user_name,
+                               password=password)
+        cur = con.cursor()
+        cur.execute(
+            """SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"""
+        )
+        tables = cur.fetchall()
+        cur.execute("\d security_agency")
+        #print(cur.fetchall())
+        con.commit()
+        con.close()
+        return render_template('query.html', tables=tables)
+    except Exception as e:
+        return render_template('error.html')
+
+
+@app.route('/dashboard', methods=['POST'])
+def dashboard():
+    try:
+        global user_name
+        global password
+        con = psycopg2.connect(host="localhost",
+                            database="postgres",
+                            user=user_name,
+                            password=password)
+        cur = con.cursor()
+        cur.execute("Select * FROM security_agency LIMIT 0")
+        tables_sa = [desc[0] for desc in cur.description]
+        updated_sec_agency = request.form.getlist("rows_sec_agency")
+        cur.execute("Select * FROM principle_employer LIMIT 0")
+        tables_pe = [desc[0] for desc in cur.description]
+        updated_pe = request.form.getlist("rows_pe")
+        l1 = np.array(updated_sec_agency).reshape(
+            len(updated_sec_agency) // len(tables_sa), len(tables_sa))
+        l2 = np.array(updated_pe).reshape(
+            len(updated_pe) // len(tables_pe), len(tables_pe))
+        cur.execute("Select * FROM security_agency")
+        db_sec_agency = [i.tolist() for i in l1]
+        db_pe = [i.tolist() for i in l2]
+        for i in cur.fetchall():
+            for j in db_sec_agency:
+                if str(i[1])==str(j[1]):
+                    if list(i)[0:len(list(i))-1] != list(j)[0:len(list(j))-1]:
+                        l = ""
+                        for p in range(len(tables_sa)-1):
+                            l = l+str(tables_sa[p])+"="+"'"+str(j[p])+"',"
+                        l = l + tables_sa[-1]+"="+"'"+str(i[-1])+"'"
+                        cur.execute("UPDATE security_agency SET "+l + "WHERE "+ str(tables_sa[1]) + "=" + str(i[1]))
+        cur.execute("Select * FROM principle_employer")
+        for i in cur.fetchall():
+            for j in db_pe:
+                if str(i[2])==str(j[2]):
+                    if list(i) != list(j):
+                        l = ""
+                        for p in range(len(tables_pe)-1):
+                            l = l+str(tables_pe[p])+"="+"'"+str(j[p])+"',"
+                        l = l + tables_pe[-1]+"="+"'"+str(i[-1])+"'"
+                        cur.execute("UPDATE principle_employer SET "+l + "WHERE "+ str(tables_pe[2]) + "=" + str(i[2]))
+        cur.execute("Select * FROM security_agency")
+        print(cur.fetchall())
+        cur.execute("Select * FROM principle_employer")
+        print(cur.fetchall())
+        con.commit()
+        return render_template(
+            "dashboard.html",
+            colnames_sec_agency=tables_sa,
+            rows_sec_agency=l1,
+            colnames_pe=tables_pe,
+            rows_pe=l2
+        )
+    except Exception as e:
+        print(e)
+        return render_template('error.html')
+
+
+@app.route('/result', methods=['POST'])
+def result():
+    try:
+        user = request.form['email']
+        pswd = request.form['pass']
+        if user == "admin" and pswd == "admin":
+            con = psycopg2.connect(host="localhost",
+                                   database="postgres",
+                                   user=user_name,
+                                   password=password)
+            cur = con.cursor()
+            cur.execute(
+                """SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"""
+            )
+            tables = cur.fetchall()
+            cur.execute("Select * FROM security_agency LIMIT 0")
+            colnames_sec_agency = [desc[0] for desc in cur.description]
+            cur.execute("Select * FROM security_agency")
+            rows_sec_agency = cur.fetchall()
+            cur.execute("Select * FROM principle_employer LIMIT 0")
+            colnames_pe = [desc[0] for desc in cur.description]
+            cur.execute("Select * FROM principle_employer")
+            rows_pe = cur.fetchall()
+            con.commit()
+            con.close()
+            #print(rows_sec_agency)
+            return render_template('dashboard.html',
+                                   colnames_sec_agency=colnames_sec_agency,
+                                   rows_sec_agency=rows_sec_agency,
+                                   colnames_pe=colnames_pe,
+                                   rows_pe=rows_pe)
+        else:
+            return render_template('error.html')
+            # return render_template('query.html', tables=tables)
+    except Exception as e:
+        print(e)
+        return render_template('error.html')
+
+
+@app.route('/queryResult', methods=['POST', 'GET'])
+def queryResult():
+
+    command = request.form["command"]
+    table = request.form["table"][2:-3]
+    values = request.form["values"]
+
+    if command == "complex":
+        query = request.form["complex"]
+
+    elif "select" in command:
+        query = command + " * from " + table + ';'
+
+    elif command == "insert into":
+        query = command + " " + table + " values(" + values + ");"
+
+    elif command == "alter table":
+        action = request.form["action"]
+        query = command + " " + table + " " + action + ';'
+
+    elif command == "update":
+        col = request.form["set"]
+        where = request.form["where"]
+        query = command + " " + table + " set " + col + " where " + where + ';'
+        print(query)
+    try:
+        con = psycopg2.connect(host="localhost",
+                               database="postgres",
+                               user=user_name,
+                               password=password)
+        cur = con.cursor()
+        cur.execute(query)
+        if "select" in query:
+            rows = cur.fetchall()
+        else:
+            query = "select" + " * from " + table + ';'
+            cur.execute(query)
+            rows = cur.fetchall()
+        column_names = [desc[0] for desc in cur.description]
+        con.commit()
+        con.close()
+        return render_template('queryResult.html',
+                               rows=rows,
+                               columns=column_names)
+    except Exception as e:
+        return render_template('error.html')
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
+
+
+import paho.mqtt.client as mqtt
+import time
+import os
+from flask import Flask, request, render_template
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, static_folder='templates')
+app.config['DEBUG'] = True
+
+
+
+def on_message(client, userdata, message):
+    print("received message: " ,str(message.payload.decode("utf-8")))
+    @app.route('/print_it', methods=['POST', 'GET'])
+    def print_it():
+        print("received message: " ,str(message.payload.decode("utf-8")))
+        return render_template('index.html', message=str(message.payload.decode("utf-8")))
+    return print_it()
+
+
+def on_message2(client, userdata, message):
+    print("received message: " ,str(message.payload.decode("utf-8")))
+    @app.route('/print_it2', methods=['POST', 'GET'])
+    def print_it():
+        print("received message: " ,str(message.payload.decode("utf-8")))
+        return render_template('index.html', message=str(message.payload.decode("utf-8")))
+    return print_it()
+
+mqttBroker ="test.mosquitto.org"
+
+client = mqtt.Client("Server1")
+client.connect(mqttBroker) 
+
+print("Connected to MQTT server!!!")
+
+client.loop_start()
+
+client.message_callback_add("test", on_message)
+client.message_callback_add("test2", on_message2)
+client.on_message=on_message 
+
+time.sleep(30)
+client.loop_stop()

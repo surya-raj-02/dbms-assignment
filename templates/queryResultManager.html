@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<style>
+		table {
+			border-collapse: collapse;
+			width: 100%;
+		}
+
+		th,
+		td {
+			padding: 8px;
+			text-align: left;
+			border-bottom: 1px solid #ddd;
+		}
+
+		tr:hover {
+			background-color: yellow;
+		}
+	</style>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icons/favicon.ico') }}" />
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/animate/animate.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/util.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+	<!--===============================================================================================-->
+</head>
+
+<body>
+	<div>
+		<center>
+			<br>
+			<br>
+			<h2>DBMS Assignment 4</h2>
+			<h1>Security management System</h1>
+		</center>
+		<br><br><br><br>
+		<!-- <form method="POST" action="http://localhost:5000/Loginresult2"> -->
+		<table>
+			<tr>
+				{%for i in columns%}
+				<th style="font-weight: bold">{{i}}</th>
+				{%endfor%}
+			</tr>
+			{% for r in rows %}
+			<tr>
+				{% for i in r %}
+				<td>{{i}}</td>
+				{%endfor%}
+				<td>
+					<form action="http://localhost:5000/guardInfo" method="post">
+						<input type="hidden" name="user" value="{{ user }}" />
+						<input type="hidden" name="password" value="{{ password }}" />
+						<input type="hidden" name="uid" value="{{ r[0] }}" />
+						<div class="container-login100-form-btn" style="width: 15%;">
+							<button type="submit" name="guard" class="login100-form-btn" value="{{user,password}}">Info
+							</button>
+						</div>
+					</form>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<br>
+		<br><br>
+		<center>
+			<form action="http://localhost:5000/guardsEdit" method="post">
+				<div class="container-login100-form-btn" style="width: 15%;">
+					<button type="submit" name="guards" class="login100-form-btn" value="{{user,password}}">Update</button>
+				</div>
+			</form>
+		</center>
+		<!-- </form> -->
+	</div>
+</body>
+
+</html>
