@@ -62,14 +62,14 @@
 			{% for r in rows %}
 			<tr>
 				<form action="http://localhost:5000/guardUpdate" method="post">
-					<td>{{r[0]}}</td>
-					<td>{{r[1]}}</td>
+					<td><input type="text" name='0' value="{{r[0]}}"></td>
+					<td><input type="text" name='1' value="{{r[1]}}"></td>
 					<td><input type="text" name='2' value="{{r[2]}}"></td>
-					<td>{{r[3]}}</td>
+					<td><input type="text" name='3' value="{{r[3]}}"></td>
 					<td><input type="text" name='4' value="{{r[4]}}"></td>
-					<td>{{r[5]}}</td>
-					<td>{{r[6]}}</td>
-					<td>{{r[7]}}</td>
+					<td><input type="text" name='5' value="{{r[5]}}"></td>
+					<td><input type="text" name='6' value="{{r[6]}}"></td>
+					<td><input type="text" name='7' value="{{r[7]}}"></td>
 					<td>
 						<input type="hidden" name="user" value="{{ user }}" />
 						<input type="hidden" name="password" value="{{ password }}" />

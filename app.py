@@ -9,7 +9,7 @@ global password
 
 
 user_name = 'postgres'
-password = "2511"
+password = "122"
 sa = {'25262': "password",
       '25261': "password",
       '25263': "password",
@@ -503,9 +503,9 @@ def guardUpdate():
 
     cur.execute("select * from guards where agency_id="+i+';')
     colnames_guards = [desc[0] for desc in cur.description]
-    for x in [2,4]:
+    for x in [0,1,2,3,4,5,6,7]:
         value=request.form[str(x)]
-        query="UPDATE guards SET "+colnames_guards[x]+"=\'"+str(value)+"\' WHERE agency_id="+str(i)+"and uid="+str(uid)+";"
+        query="UPDATE guards SET "+colnames_guards[x]+"=\'"+value+"\' WHERE agency_id="+str(i)+"and uid="+str(uid)+";"
         print(query)
         cur.execute(query)
     
