@@ -160,6 +160,7 @@ def Loginresult2():
         temp = request.form["xyz"].split(',')
         user = temp[0][2:-1]
         pswd = temp[1][2:-2]
+        
         print(user)
         print(pswd)
         if user in list(sa.keys()) and (pswd == sa[user] or pswd=="adminSA"):
@@ -192,7 +193,50 @@ def Loginresult2():
             query6 = "select count(*) from manager where agency_id="+user+";"
             cur.execute(query6)
             NoOfMan = cur.fetchall()[0][0]
+            try:
+                updated_sec_agency = request.form.getlist("rows_sec_agency")
+                print(updated_sec_agency)
+                cur.execute("Select * FROM dependents LIMIT 0")
+                tables_sa = [desc[0] for desc in cur.description]
+                l1 = np.array(updated_sec_agency).reshape(
+                    len(updated_sec_agency) // len(tables_sa), len(tables_sa))
+                db_sec_agency = [i.tolist() for i in l1]
+                cur.execute("Select * FROM dependents where uan="+l1[0][4]+";")
+                for i in cur.fetchall():
+                    for j in db_sec_agency:
+                        if str(i[3])==str(j[3]):
 
+                            l = ""
+                            print("ell")
+                            for p in range(len(tables_sa)-1):
+                                if p>1:
+                                    l = l+str(tables_sa[p])+"="+""+str(j[p])+","
+                                else:
+                                    l = l+str(tables_sa[p])+"="+"'"+str(j[p])+"',"
+                            l = l + tables_sa[-1]+"="+str(i[-1])
+                            print("UPDATE dependents SET "+l + "WHERE "+ str(tables_sa[3]) + "=" + str(i[3]) + ";")
+                            cur.execute("UPDATE dependents SET "+l + " WHERE "+ str(tables_sa[3]) + "=" + str(i[3]) + ";")
+                con.commit()
+            except Exception as e:
+                pass
+
+            if pswd=="adminSA":
+                cur.execute("Select * FROM security_agency LIMIT 0")
+                colnames_sec_agency = [desc[0] for desc in cur.description]
+                cur.execute("Select * FROM security_agency")
+                rows_sec_agency = cur.fetchall()
+                cur.execute("Select * FROM principle_employer LIMIT 0")
+                colnames_pe = [desc[0] for desc in cur.description]
+                cur.execute("Select * FROM principle_employer")
+                rows_pe = cur.fetchall()
+                con.commit()
+                con.close()
+                print(rows_sec_agency)
+                return render_template('dashboard.html',
+                                    colnames_sec_agency=colnames_sec_agency,
+                                    rows_sec_agency=rows_sec_agency,
+                                    colnames_pe=colnames_pe,
+                                    rows_pe=rows_pe)
             return render_template('SecurityDashboard.html',
                                    securityagency=agency_name,
                                    noOfPE=noOfPE,
@@ -202,6 +246,7 @@ def Loginresult2():
                                    noOfManagers=NoOfMan,
                                    agency_id=user,
                                    password=pswd)
+            
 
         else:
             return render_template('error.html')
@@ -215,6 +260,7 @@ def Loginresult2():
 def Loginresult():
     try:
         user = request.form['email']
+
         print("________________________________________________________________________")
         print(user)
         print("________________________________________________________________________")
