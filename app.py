@@ -9,7 +9,7 @@ global password
 
 
 user_name = 'postgres'
-password = "122"
+password = "2511"
 sa = {'25262': "password",
       '25261': "password",
       '25263': "password",
@@ -610,6 +610,49 @@ def SAUpdate():
                            rows_sec_agency=rows_sec_agency,
                            colnames_pe=colnames_pe,
                            rows_pe=rows_pe)
+
+@app.route('/guardUpdateAdd', methods=['POST', 'GET'])
+def guardUpdateAdd():
+    temp = request.form["guards"].split(',')
+    i = temp[0][2:-1]
+    pwdx = temp[1][2:-2]
+    
+    con = psycopg2.connect(host="localhost",
+                           database="postgres",
+                           user=user_name,
+                           password=password)
+    
+    cur = con.cursor()
+
+    cur.execute("select * from guards where agency_id="+i+';')
+    colnames_guards = [desc[0] for desc in cur.description]
+
+    query= "INSERT INTO extras values(0,0,"+request.form[str(1)]+",0,0,0,0);"
+    print(query)
+    cur.execute(query)
+
+    query= "INSERT INTO salary values("+request.form[str(5)]+",0,0,"+request.form[str(6)]+","+request.form[str(1)] +");"
+    print(query)
+    cur.execute(query)
+
+    query= "INSERT INTO guards (" +colnames_guards[0]+","+colnames_guards[1]+","+colnames_guards[2]+","+colnames_guards[3]+","+colnames_guards[4]+","+colnames_guards[5]+","+colnames_guards[6]+","+colnames_guards[7]+") VALUES("+request.form[str(0)]+","+request.form[str(1)]+",'"+request.form[str(2)]+"',"+request.form[str(3)]+",'"+request.form[str(4)]+"',"+request.form[str(5)]+","+request.form[str(6)]+","+request.form[str(7)]+");"
+    print(query)
+    cur.execute(query)
+    
+    con.commit()
+
+
+    query = "select * from guards where agency_id="+i+';'
+    cur.execute(query)
+    rows = cur.fetchall()
+    column_names = [desc[0] for desc in cur.description]
+    con.commit()
+    con.close()
+    return render_template('queryResultManagerEdit.html',
+                           rows=rows,
+                           columns=column_names,
+                           user=i,
+                           password=pwdx)
 
 
 if __name__ == '__main__':

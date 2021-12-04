@@ -54,16 +54,19 @@
 		<br><br><br><br>
 		<!-- <form method="POST" action="http://localhost:5000/Loginresult2"> -->
 		<table>
+			<!-- displaying table headings -->
 			<tr>
 				{%for i in columns%}
 				<th style="font-weight: bold">{{i}}</th>
 				{%endfor%}
 			</tr>
+			<!-- displaying table data -->
 			{% for r in rows %}
 			<tr>
 				{% for i in r %}
 				<td>{{i}}</td>
 				{%endfor%}
+
 				<td>
 					<form action="http://localhost:5000/guardInfo" method="post">
 						<input type="hidden" name="user" value="{{ user }}" />
@@ -75,6 +78,7 @@
 						</div>
 					</form>
 				</td>
+				
 			</tr>
 			{% endfor %}
 		</table>
