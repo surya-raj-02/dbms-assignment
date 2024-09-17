@@ -5,6 +5,10 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__,static_folder='templates')
 app.config['DEBUG'] = True
 
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
 
 import psycopg2
 
